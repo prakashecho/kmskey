@@ -15,7 +15,7 @@ resource "aws_kms_key" "me_kms_key" {
 # Optional: Create an alias for the KMS key
 resource "aws_kms_alias" "me_kms_key_alias" {
   name          = "alias/me-key-alias"
-  target_key_id = aws_kms_key.my_kms_key.id
+  target_key_id = aws_kms_key.me_kms_key.id
 }
 
 # Optional: Define a key policy document
