@@ -37,16 +37,12 @@ jobs:
       env:
         TF_IN_AUTOMATION: true
 
-    - name: Get KMS Key ARN
-      run: |
-        kms_key_arn=$(terraform output -raw kms_key_arn)
-        echo "KMS Key ARN: $kms_key_arn"
-
-    - name: Get KMS Key Alias
-      run: |
-        kms_key_alias=$(terraform output -raw kms_key_alias)
-        echo "KMS Key Alias: $kms_key_alias"
-
+    - name: Save KMS Key Alias
+      run: echo "KMS_KEY_ARN=$(terraform output -raw kms_key_arn)" >> $GITHUB_ENV
+        
+    - name: Save KMS Key Alias
+      run: echo "KMS_KEY_ALIAS=$(terraform output -raw kms_key_alias)" >> $GITHUB_ENV
+      
   packer:
     runs-on: ubuntu-latest
     name: Run Packer
@@ -75,6 +71,8 @@ jobs:
         id: validate
         run: "packer validate ./jenkinsubuntu.pkr.hcl"
 
-      - name: Run 'packer build'
+      - name: Run 'packer build' 
         id: build
-        run: packer build  ./jenkinsubuntu.pkr.hcl    
+        env: 
+          KMS_KEY_ARN: ${{ env.KMS_KEY_ARN }}
+        run: packer build -var "kms_key_id=${KMS_KEY_ARN}" ./jenkinsubuntu.pkr.hcl    
