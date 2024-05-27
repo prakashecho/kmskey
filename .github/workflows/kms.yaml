@@ -1,6 +1,6 @@
 name: Create AMI withKMS Key
 
-on :
+on:
   push:
     branches:
       - main
