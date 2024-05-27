@@ -16,7 +16,7 @@ source "amazon-ebs" "ubuntu" {
   source_ami     = "ami-04b70fa74e45c3917"
   ssh_username   = "ubuntu"
   encrypt_boot   = true
-  kms_key_id     = "ami3_key-alias"
+  kms_key_id     = "22ad3ccd-28a1-4d05-ad73-5f284cea93b3"
 }
 
 build {
