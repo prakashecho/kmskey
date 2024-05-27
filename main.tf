@@ -41,7 +41,7 @@ data "aws_caller_identity" "current" {}
 
 # Output the KMS key ARN
 output "kms_key_arn" {
-  value       = aws_kms_key.example_key.arn
+  value       = aws_kms_key.kms_ami.arn
   description = "ARN of the created KMS key"
 }
 
