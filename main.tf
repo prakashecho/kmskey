@@ -9,7 +9,7 @@ resource "aws_kms_key" "me_kms_key" {
   enable_key_rotation     = true # Optional: Enable automatic key rotation
 
   # Optional: Configure a key policy
-  policy = data.aws_iam_policy_document.my_kms_key_policy.json
+  policy = data.aws_iam_policy_document.me_kms_key_policy.json
 }
 
 # Optional: Create an alias for the KMS key
