@@ -37,7 +37,7 @@ data "aws_iam_policy_document" "my_kms_key_policy" {
 }
 
 # Get the current account ID
-data "aws_caller_identity" "current_account" {}
+data "aws_caller_identity" "current" {}
 
 # Output the KMS key ARN
 output "kms_key_arn" {
