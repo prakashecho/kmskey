@@ -37,9 +37,10 @@ jobs:
       env:
         TF_IN_AUTOMATION: true
 
-    - name: Get KMS Key ARN
-      id: get_kms_key_arn
-      run: echo "KMS_KEY_ARN=$(terraform output -raw kms_key_arn)" >> $GITHUB_ENV
+    - name: Save KMS Key ARN to terraform.tfvars
+      run: |
+        kms_key_arn=$(terraform output -raw kms_key_arn)
+        echo "kms_key_arn=\"$kms_key_arn\"" > terraform.tfvars
 
   packer:
     runs-on: ubuntu-latest
@@ -73,4 +74,4 @@ jobs:
       id: build
       run: packer build ./jenkinsubuntu.pkr.yaml
       env:
-        KMS_KEY_ARN: ${{ env.KMS_KEY_ARN }}
+        KMS_KEY_ARN: ${{ secrets.KMS_KEY_ARN }}
