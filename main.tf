@@ -3,23 +3,23 @@ provider "aws" {
 }
 
 # Create a KMS key
-resource "aws_kms_key" "ami2_key" {
+resource "aws_kms_key" "ami3_key" {
   description             = "Me KMS Key"
   deletion_window_in_days = 10 # Optional: Set the deletion window for the KMS key
   enable_key_rotation     = true # Optional: Enable automatic key rotation
 
   # Optional: Configure a key policy
-  policy = data.aws_iam_policy_document.ami2_key_policy.json
+  policy = data.aws_iam_policy_document.ami3_key_policy.json
 }
 
 # Optional: Create an alias for the KMS key
-resource "aws_kms_alias" "ami2_key_alias" {
-  name          = "alias/ami2_key-alias"
-  target_key_id = aws_kms_key.ami2_key.id
+resource "aws_kms_alias" "ami3_key_alias" {
+  name          = "alias/ami3_key-alias"
+  target_key_id = aws_kms_key.ami3_key.id
 }
 
 # Optional: Define a key policy document
-data "aws_iam_policy_document" "ami2_key_policy" {
+data "aws_iam_policy_document" "ami3_key_policy" {
   # Allow the current account's root user to perform KMS operations
   statement {
     sid       = "Enable IAM User Permissions"
@@ -41,12 +41,12 @@ data "aws_caller_identity" "current" {}
 
 # Output the KMS key ARN
 output "kms_key_arn" {
-  value       = aws_kms_key.ami2_key.arn
+  value       = aws_kms_key.ami3_key.arn
   description = "ARN of the created KMS key"
 }
 
 # Output the KMS key alias (if configured)
 output "kms_key_alias" {
-  value       = aws_kms_alias.ami2_key_alias.name
+  value       = aws_kms_alias.ami3_key_alias.name
   description = "Alias of the created KMS key"
 }
