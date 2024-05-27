@@ -13,7 +13,7 @@ resource "aws_kms_key" "kms_ami" {
 }
 
 # Optional: Create an alias for the KMS key
-resource "aws_kms_alias" "example_alias" {
+resource "aws_kms_alias" "kms_ami_alias" {
   name          = "alias/example-key-alias"
   target_key_id = aws_kms_key.kms_ami.id
 }
@@ -47,6 +47,6 @@ output "kms_key_arn" {
 
 # Output the KMS key alias (if configured)
 output "kms_key_alias" {
-  value       = aws_kms_alias.example_alias.name
+  value       = aws_kms_alias.ams-ami_alias.name
   description = "Alias of the created KMS key"
 }
