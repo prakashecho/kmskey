@@ -1,9 +1,10 @@
-name: Create AMI withKMS Key
+name: Build Encrypted AMI with Packer and KMS
 
 on:
   push:
     branches:
       - main
+
 permissions:
   id-token: write # This is required for requesting the JWT      
 
@@ -25,7 +26,6 @@ jobs:
           role-session-name: github-actions
           aws-region: us-east-1  
 
-
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
 
@@ -37,42 +37,40 @@ jobs:
       env:
         TF_IN_AUTOMATION: true
 
-    - name: Save KMS Key Alias
+    - name: Get KMS Key ARN
+      id: get_kms_key_arn
       run: echo "KMS_KEY_ARN=$(terraform output -raw kms_key_arn)" >> $GITHUB_ENV
-        
-    - name: Save KMS Key Alias
-      run: echo "KMS_KEY_ALIAS=$(terraform output -raw kms_key_alias)" >> $GITHUB_ENV
-      
+
   packer:
     runs-on: ubuntu-latest
-    name: Run Packer
+    needs: create-kms-key
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4.0.2
-        with:
-          role-to-assume: arn:aws:iam::874599947932:role/gitaws
-          role-session-name: github-actions
-          aws-region: us-east-1  
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4.0.2
+      with:
+        role-to-assume: arn:aws:iam::874599947932:role/gitaws
+        role-session-name: github-actions
+        aws-region: us-east-1  
 
-      - name: Setup `packer`
-        uses: hashicorp/setup-packer@main
-        id: setup
-        with:
-          version: ${{ env.PRODUCT_VERSION }}
+    - name: Setup Packer
+      uses: hashicorp/setup-packer@main
+      id: setup
+      with:
+        version: "1.10.0" # or "latest"
 
-      - name: Run `packer init`
-        id: init
-        run: "packer init ./jenkinsubuntu.pkr.hcl"
+    - name: Run `packer init`
+      id: init
+      run: packer init ./jenkinsubuntu.pkr.yaml
 
-      - name: Run `packer validate`
-        id: validate
-        run: "packer validate ./jenkinsubuntu.pkr.hcl"
+    - name: Run `packer validate`
+      id: validate
+      run: packer validate ./jenkinsubuntu.pkr.yaml
 
-      - name: Run 'packer build' 
-        id: build
-        env: 
-          KMS_KEY_ARN: ${{ env.KMS_KEY_ARN }}
-        run: packer build -var "kms_key_id=${KMS_KEY_ARN}" ./jenkinsubuntu.pkr.hcl    
+    - name: Run `packer build`
+      id: build
+      run: packer build ./jenkinsubuntu.pkr.yaml
+      env:
+        KMS_KEY_ARN: ${{ env.KMS_KEY_ARN }}
