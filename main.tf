@@ -47,6 +47,6 @@ output "kms_key_arn" {
 
 # Output the KMS key alias (if configured)
 output "kms_key_alias" {
-  value       = aws_kms_alias.ams-ami_alias.name
+  value       = aws_kms_alias.kms_ami_alias.name
   description = "Alias of the created KMS key"
 }
