@@ -9,9 +9,7 @@ resource "aws_kms_key" "example_key" {
   enable_key_rotation     = true # Optional: Enable automatic key rotation
 
   # Optional: Add an alias for the KMS key
-  aliases = [
-    "alias/example-key"
-  ]
+  
 
   # Optional: Configure a key policy
   policy = data.aws_iam_policy_document.kms_key_policy.json
