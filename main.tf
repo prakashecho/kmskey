@@ -8,11 +8,14 @@ resource "aws_kms_key" "example_key" {
   deletion_window_in_days = 10 # Optional: Set the deletion window for the KMS key
   enable_key_rotation     = true # Optional: Enable automatic key rotation
 
-  # Optional: Add an alias for the KMS key
-  
-
   # Optional: Configure a key policy
   policy = data.aws_iam_policy_document.kms_key_policy.json
+}
+
+# Optional: Create an alias for the KMS key
+resource "aws_kms_alias" "example_alias" {
+  name          = "alias/example-key-alias"
+  target_key_id = aws_kms_key.example_key.id
 }
 
 # Optional: Define a key policy document
@@ -44,6 +47,6 @@ output "kms_key_arn" {
 
 # Output the KMS key alias (if configured)
 output "kms_key_alias" {
-  value       = aws_kms_key.example_key.aliases[0]
+  value       = aws_kms_alias.example_alias.name
   description = "Alias of the created KMS key"
 }
