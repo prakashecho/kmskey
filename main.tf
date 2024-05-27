@@ -9,13 +9,13 @@ resource "aws_kms_key" "ami1_key" {
   enable_key_rotation     = true # Optional: Enable automatic key rotation
 
   # Optional: Configure a key policy
-  policy = data.aws_iam_policy_document.ami_key_policy.json
+  policy = data.aws_iam_policy_document.ami1_key_policy.json
 }
 
 # Optional: Create an alias for the KMS key
 resource "aws_kms_alias" "ami1_key_alias" {
   name          = "alias/ami1_key-alias"
-  target_key_id = aws_kms_key.ami_key.id
+  target_key_id = aws_kms_key.ami1_key.id
 }
 
 # Optional: Define a key policy document
