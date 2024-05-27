@@ -64,14 +64,14 @@ jobs:
 
     - name: Run `packer init`
       id: init
-      run: packer init ./jenkinsubuntu.pkr.yaml
+      run: packer init ./jenkinsubuntu.pkr.hcl
 
     - name: Run `packer validate`
       id: validate
-      run: packer validate ./jenkinsubuntu.pkr.yaml
+      run: packer validate ./jenkinsubuntu.pkr.hcl
 
     - name: Run `packer build`
       id: build
-      run: packer build ./jenkinsubuntu.pkr.yaml
+      run: packer build ./jenkinsubuntu.pkr.hcl
       env:
         KMS_KEY_ARN: ${{ secrets.KMS_KEY_ARN }}
