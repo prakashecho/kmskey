@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 # Create a KMS key
-resource "aws_kms_key" "example_key" {
+resource "aws_kms_key" "kms_ami" {
   description             = "Example KMS Key"
   deletion_window_in_days = 10 # Optional: Set the deletion window for the KMS key
   enable_key_rotation     = true # Optional: Enable automatic key rotation
@@ -15,7 +15,7 @@ resource "aws_kms_key" "example_key" {
 # Optional: Create an alias for the KMS key
 resource "aws_kms_alias" "example_alias" {
   name          = "alias/example-key-alias"
-  target_key_id = aws_kms_key.example_key.id
+  target_key_id = aws_kms_key.kms_ami.id
 }
 
 # Optional: Define a key policy document
